@@ -5,9 +5,15 @@ dotenv.config()
 const secret_key = process.env.SECRET
 
 const checkToken = (req, res, next) => {
+  // console.log('headers => ', req.headers)
 
   const token = req.headers?.authorization?.split(' ')[1] || null
   const decoded = jwt.decode(token, secret_key)
+
+  console.log('decode => ', decoded)
+
+  // const verify = jwt.verify(token, secret_key)
+  // console.log('verify => ', verify)
 
   if (token && decoded.exp <= Date.now() / 1000) {
     return res.status(401).json({
@@ -22,6 +28,10 @@ const checkToken = (req, res, next) => {
       message: 'token unautorized'
     })
   }
+
+  // if (!token) {
+  //   console.log('test with no return')
+  // }
 
   next()
 }
